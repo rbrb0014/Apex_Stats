@@ -15,13 +15,12 @@ client.commands.load = dir => {
         client.commands.set(cmd.name, cmd);
     }
     console.log(client.commands.map(c => c.name).join(', ') + ' 명령어가 로드됨.');
-}//명령어가 로드 안됨 8ㅁ8
+}
 
 client.commands.load(__dirname + "/commands");
-//해당 파일 위치 디렉터리에서 /commands  경로 추가
+//해당 파일 위치 디렉터리에서 /commands 경로 추가
 
 client.on('ready', () => console.log(`${client.user.tag} 에 로그인됨`));
-
 
 client.on("message", message => {
     if (message.author.bot) return;//봇이 쓴거는 무시
@@ -32,7 +31,7 @@ client.on("message", message => {
     const command = args.shift().toLowerCase();
 
     let cmd = client.commands.get(command);
-
+    console.log(cmd);
     if (cmd) cmd.run(client, message, args);
 });
 

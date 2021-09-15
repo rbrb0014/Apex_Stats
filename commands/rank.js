@@ -1,10 +1,10 @@
-const Discord = require('discord.js');
 const config = require("../config.json");
+const request = require("request");
 
 exports.run = (client, message, args) => {
     const url = `https://public-api.tracker.gg/v2/apex/standard/profile`;
     const UserId = args.shift();
-    const RequestUrl = `${url}/origin/${UserId}?TRN-Api-Key=${path.join(__dirname, '..', config.API_KEY)}&Accept=application/json&Accept-Encoding=gzip`;
+    const RequestUrl = `${url}/origin/${UserId}?TRN-Api-Key=${config.API_KEY}&Accept=application/json&Accept-Encoding=gzip`;
 
     request(RequestUrl, function (err, response, body) {
         if (err) throw err;
@@ -16,6 +16,4 @@ exports.run = (client, message, args) => {
     })
 };
 
-exports = {
-    name: 'rank'
-};
+module.exports.name = 'rank';

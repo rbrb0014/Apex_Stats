@@ -1,12 +1,14 @@
 const Discord = require('discord.js');
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
     let sent = "";
+    let count;
     try {
-        const count = args.shift().valueOf();
+        count = args.shift().valueOf();
     } catch (error) {
-        msg = await message.channel.send(`!!슈슉 [횟수]로 실행하는 명령어입니다.`);
-        await msg.delete();
+        msg = message.channel.send(`!!슈슉 [횟수]로 실행하는 명령어입니다.`);
+        await sleep(100);
+        msg.delete();
     }
     while (sent.length < count * 3) {
         const random1 = Math.random() * 10;
@@ -37,6 +39,4 @@ exports.run = async (client, message, args) => {
     message.delete();
 };
 
-exports = {
-    name: '슈슉'
-};
+module.exports.name = '슈슉';

@@ -1,6 +1,4 @@
-const Discord = require('discord.js');
-
-exports.run = (client, message, args) => {
+module.exports.run = (client, message, args) => {
     /*
     if (!message.author.dmChannel) message.author.createDM();
     message.author.dmChannel.send("rank 명령어로 티어와 점수를 볼 수 있습니다.");
@@ -8,6 +6,4 @@ exports.run = (client, message, args) => {
     message.channel.send(`모든 명령어는 DM으로 보내드렸습니다.\n:arrow_right:이 봇의 접두명령어는 \`!!\`입니다!`)
 };
 
-exports = {
-    name: 'help'
-};
+module.exports.name = 'help';
