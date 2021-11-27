@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const config = require("./config.json");
+//.gitignore로 깃허브에 올라가지 않음
 const request = require("request");
 
 const client = new Discord.Client();
