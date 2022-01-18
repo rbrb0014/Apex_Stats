@@ -20,7 +20,6 @@ client.commands.load = dir => {
 
 client.commands.load(__dirname + "/commands");
 //해당 파일 위치 디렉터리에서 /commands 경로 추가
-
 client.on('ready', () => console.log(`${client.user.tag} 에 로그인됨`));
 
 client.on("message", message => {
