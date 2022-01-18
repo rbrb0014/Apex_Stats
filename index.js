@@ -1,54 +1,38 @@
 const Discord = require("discord.js");
+const fs = require("fs");
 const config = require("./config.json");
+//.gitignore로 깃허브에 올라가지 않음
 const request = require("request");
 
+const client = new Discord.Client();
 const prefix = "!!";
 
-const client = new Discord.Client();
 
-client.on("message", function (message) {
-    //봇이 쓴거는 무시
-    if (message.author.bot) return;
-    //prefix가 안맞으면 무시
-    if (!message.content.startsWith(prefix)) return;
+client.commands = new Discord.Collection()
 
-    //prefix를 제외한 명령어 몸체부분
-    const commandBody = message.content.slice(prefix.length);
+client.commands.load = dir => {
+    for (const file of fs.readdirSync(dir)) {
+        const cmd = require(`./commands/${file}`);
+        client.commands.set(cmd.name, cmd);
+    }
+    console.log(client.commands.map(c => c.name).join(', ') + ' 명령어가 로드됨.');
+}
+
+client.commands.load(__dirname + "/commands");
+//해당 파일 위치 디렉터리에서 /commands 경로 추가
+client.on('ready', () => console.log(`${client.user.tag} 에 로그인됨`));
+
+client.on("message", message => {
+    if (message.author.bot) return;//봇이 쓴거는 무시
+    if (!message.content.startsWith(prefix)) return;//prefix가 안맞으면 무시
+
     //args={명령어,인수1,인수2,  ...}
-    const args = commandBody.split(' ');
-    //명령어 소문자로 뽑아냄(명령어 일원화)
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    //실제 실행되는 명령어 부문
-    switch (command) {
-        case "ping":
-            message.reply(`pong!`);
-            break;
-        case "sum":
-            const numArgs = args.map(x => parseFloat(x));
-            const sum = numArgs.reduce((counter, x) => counter += x);
-            message.reply(`Sum result: ${sum}`);
-            break;
-        case "stats":
-            const url = `https://public-api.tracker.gg/v2/apex/standard/profile`;
-            const UserId = args.shift();
-            const RequestUrl = `${url}/origin/${UserId}?TRN-Api-Key=${config.API_KEY}&Accept=application/json&Accept-Encoding=gzip`;
-            
-            request(RequestUrl,function(err,response,body){
-                if(err) throw err;
-                const UserData = JSON.parse(body);
-                const UserRankScore = UserData.data.segments[0].stats.rankScore
-                const UserRankName = UserRankScore.metadata.rankName;
-                const UserRankValue = UserRankScore.value;
-                message.reply(`${UserId}님은 ${UserRankName}입니다!\n상세 점수는 ${UserRankValue}점 입니다.`);
-            })
-            break;
-        default:
-            message.reply(`이 이건 모르는건데요?0?`);
-            break;
-    }
+    let cmd = client.commands.get(command);
+    console.log(cmd);
+    if (cmd) cmd.run(client, message, args);
 });
-
-
 
 client.login(config.BOT_TOKEN);
