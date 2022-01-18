@@ -6,4 +6,4 @@
 ## 실행 방법
 config.json파일을 만들고 BOT_TOKEN, API_KEY를 작성해주세요.
 ## 라이센스
-Using Apex Legends & Traker.gg OPEN API
+Apex Legends, Traker.gg의 오픈API를 이용함
