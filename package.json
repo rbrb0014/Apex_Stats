@@ -4,6 +4,9 @@
   "description": "Develop My own Discord Bot to check player's Apex Legends stats.",
   "main": "index.js",
   "dependencies": {
+    "@discordjs/builders": "^0.15.0",
+    "@discordjs/rest": "^0.5.0",
+    "discord-api-types": "^0.33.5",
     "discord.js": "^12.5.3",
     "request": "^2.88.2"
   },
