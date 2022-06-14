@@ -2,8 +2,9 @@ const fs = require('fs');
 const Discord = require("discord.js");
 
 module.exports = {
-    name: '어록',
-    description: '사람들이 어떤 말을 했나 적어둡니다',
+    name: 'ment',
+    description: '사람들이 한 말들을 적어둡니다',
+    //!!ment [condition] @nicknameTag [args...]
     run: async (client, message, args) => {
         const subcommand = args.shift();
 
