@@ -1,13 +1,35 @@
-const Discord = require("discord.js");
-const fs = require("fs");
-const { prefix, token } = require("./data/config.json"); //.gitignore로 깃허브에 올라가지 않음
+import { Client, Intents, Collection } from "discord.js";
+import { registerCommands } from './data/deploy-commands.mjs';
+import dotenv from "dotenv";//gitignore
+import { readdirSync } from "fs";
 
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
+dotenv.config({path: './data/.env'});
+const client = new Client({intents: [Intents.FLAGS.GUILDS]});
+
+// Slash Command 추가
+registerCommands(
+    process.env.DISCORD_BOT_TOKEN,
+    process.env.CLIENT_ID,
+    process.env.TO_REGISTER_GUILD);
+
+// 메시지를 받으면 호출되는 함수
+client.on('interactionCreate', async interaction => {
+    // Original: https://discordjs.guide/interactions/replying-to-slash-commands.html#receiving-interactions
+    if (!interaction.isCommand()) return;
+
+    if (interaction.commandName === '안녕하세요') {
+        await interaction.reply('인사 잘한다~');
+    }
+});
+
+client.login(process.env.DISCORD_BOT_TOKEN).then(console.log("LOGIN SUCCESS."));
+client.once('ready', () => console.log(`logged in to ${client.user.tag}.`));
+
+client.commands = new Collection();
 
 client.commands.load = dir => {
     console.log(dir);
-    for (const file of fs.readdirSync(dir)) {
+    for (const file of readdirSync(dir)) {
         const cmd = require(`./commands/${file}/${file}`);
         client.commands.set(cmd.name, cmd);
     }
@@ -15,7 +37,6 @@ client.commands.load = dir => {
 }
 
 client.commands.load(__dirname + "/commands");
-client.once('ready', () => console.log(`${client.user.tag} 에 로그인됨`));
 
 client.on("message", message => {
     if (message.author.bot) return;//봇의 채팅 무시(무한반복 방지)
@@ -32,5 +53,3 @@ client.on("message", message => {
         console.log(cmd.name);
     }
 });
-
-client.login(token);
